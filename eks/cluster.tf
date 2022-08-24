@@ -40,6 +40,9 @@ resource "aws_iam_role" "ServiceRole" {
   ]
 }
 POLICY
+  tags = {
+    yor_trace = "bea86e1e-78e0-4860-ac7c-f654f82774c9"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
@@ -99,7 +102,8 @@ resource "aws_vpc" "cluster_vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "${random_pet.prefix.id}-VPC"
+    Name      = "${random_pet.prefix.id}-VPC"
+    yor_trace = "514d33e4-eb41-4724-a191-c03775ee22ef"
   }
   lifecycle {
     ignore_changes = [
@@ -117,6 +121,7 @@ resource "aws_subnet" "public_subnet_a" {
   tags = {
     Name                     = "${random_pet.prefix.id}-PublicSubnetA",
     "kubernetes.io/role/elb" = "1"
+    yor_trace                = "31be4979-0d7d-4877-b237-186593654e34"
   }
   lifecycle {
     ignore_changes = [
@@ -133,6 +138,7 @@ resource "aws_subnet" "public_subnet_b" {
   tags = {
     Name                     = "${random_pet.prefix.id}-PublicSubnetB",
     "kubernetes.io/role/elb" = "1"
+    yor_trace                = "c1bd2001-7f80-464d-a366-87c60a349fd8"
   }
   lifecycle {
     ignore_changes = [
@@ -149,6 +155,7 @@ resource "aws_subnet" "public_subnet_c" {
   tags = {
     Name                     = "${random_pet.prefix.id}-PublicSubnetC",
     "kubernetes.io/role/elb" = "1"
+    yor_trace                = "f46d340a-e948-4800-b6b2-058e383a79d6"
   }
   lifecycle {
     ignore_changes = [
@@ -165,6 +172,7 @@ resource "aws_subnet" "private_subnet_a" {
   tags = {
     Name                              = "${random_pet.prefix.id}-PrivateSubnetA",
     "kubernetes.io/role/internal-elb" = "1"
+    yor_trace                         = "6428554f-2e31-4e7d-a783-2d7bed4287f1"
   }
   lifecycle {
     ignore_changes = [
@@ -181,6 +189,7 @@ resource "aws_subnet" "private_subnet_b" {
   tags = {
     Name                              = "${random_pet.prefix.id}-PrivateSubnetB",
     "kubernetes.io/role/internal-elb" = "1"
+    yor_trace                         = "7a4cd107-fee4-48d1-ba4a-91e00ca9f0ba"
   }
   lifecycle {
     ignore_changes = [
@@ -197,6 +206,7 @@ resource "aws_subnet" "private_subnet_c" {
   tags = {
     Name                              = "${random_pet.prefix.id}-PrivateSubnetC",
     "kubernetes.io/role/internal-elb" = "1"
+    yor_trace                         = "3861ccbd-80af-41c7-a1cc-cece21be3fb4"
   }
   lifecycle {
     ignore_changes = [
@@ -213,7 +223,8 @@ resource "aws_route_table" "private_route_table_a" {
     nat_gateway_id = aws_nat_gateway.ngw.id
   }
   tags = {
-    Name = "${random_pet.prefix.id}-PrivateRouteTableA"
+    Name      = "${random_pet.prefix.id}-PrivateRouteTableA"
+    yor_trace = "a483db9b-771e-45db-a5ea-bd7b4a7d6045"
   }
 }
 
@@ -224,7 +235,8 @@ resource "aws_route_table" "private_route_table_b" {
     nat_gateway_id = aws_nat_gateway.ngw.id
   }
   tags = {
-    Name = "${random_pet.prefix.id}-PrivateRouteTableB"
+    Name      = "${random_pet.prefix.id}-PrivateRouteTableB"
+    yor_trace = "3ee333e8-10c3-45ce-8245-baaa162db94a"
   }
 }
 
@@ -235,7 +247,8 @@ resource "aws_route_table" "private_route_table_c" {
     nat_gateway_id = aws_nat_gateway.ngw.id
   }
   tags = {
-    Name = "${random_pet.prefix.id}-PrivateRouteTableC"
+    Name      = "${random_pet.prefix.id}-PrivateRouteTableC"
+    yor_trace = "64bd374f-a5cc-419f-827a-b155a701bbbd"
   }
 }
 
@@ -246,7 +259,8 @@ resource "aws_route_table" "public_route_table" {
     gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
-    Name = "${random_pet.prefix.id}-PublicRouteTable"
+    Name      = "${random_pet.prefix.id}-PublicRouteTable"
+    yor_trace = "067bed9d-0668-4b99-9f93-e34689fd2af3"
   }
 }
 
@@ -284,7 +298,8 @@ resource "aws_route_table_association" "public_table_assoc_c" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.cluster_vpc.id
   tags = {
-    Name = "${random_pet.prefix.id}-IGW"
+    Name      = "${random_pet.prefix.id}-IGW"
+    yor_trace = "92264193-7387-4578-9e13-7490aae6c2ef"
   }
 }
 
@@ -292,7 +307,8 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_eip" "eip" {
   vpc = true
   tags = {
-    Name = "${random_pet.prefix.id}-EIP"
+    Name      = "${random_pet.prefix.id}-EIP"
+    yor_trace = "572e763f-cba3-48bd-89b6-7dc163e4ebce"
   }
 }
 
@@ -301,7 +317,8 @@ resource "aws_nat_gateway" "ngw" {
   allocation_id = aws_eip.eip.id
   subnet_id     = aws_subnet.public_subnet_a.id
   tags = {
-    Name = "${random_pet.prefix.id}-NGW"
+    Name      = "${random_pet.prefix.id}-NGW"
+    yor_trace = "bc5bacd5-1443-4a60-bfdd-87dc407c765e"
   }
 }
 
@@ -311,7 +328,8 @@ resource "aws_security_group" "ControlPlaneSecurityGroup" {
   description = "Communication between the control plane and worker nodegroups"
   vpc_id      = aws_vpc.cluster_vpc.id
   tags = {
-    Name = "${random_pet.prefix.id}-ControlPlaneSecurityGroup"
+    Name      = "${random_pet.prefix.id}-ControlPlaneSecurityGroup"
+    yor_trace = "4b4693a0-d792-451f-97ec-2d2464862526"
   }
 }
 
@@ -320,7 +338,8 @@ resource "aws_security_group" "ClusterSharedNodeSecurityGroup" {
   description = "Communication between all nodes in the cluster"
   vpc_id      = aws_vpc.cluster_vpc.id
   tags = {
-    Name = "${random_pet.prefix.id}-ClusterSharedNodeSecurityGroup"
+    Name      = "${random_pet.prefix.id}-ClusterSharedNodeSecurityGroup"
+    yor_trace = "986f4ee2-0c2e-4585-9b49-a2c257eec387"
   }
 }
 
@@ -384,5 +403,8 @@ resource "aws_eks_cluster" "ControlPlane" {
     aws_iam_role_policy_attachment.AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.AmazonEKSServicePolicy
   ]
+  tags = {
+    yor_trace = "2bc717ea-b360-46ae-a15e-6ff707093cc1"
+  }
 }
 

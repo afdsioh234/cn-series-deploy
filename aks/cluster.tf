@@ -45,4 +45,7 @@ resource "azurerm_kubernetes_cluster" "default" {
     network_plugin    = "azure"
     load_balancer_sku = "standard"
   }
+  tags = {
+    yor_trace = "013900e2-6b5a-4967-ab56-f77e429f298c"
+  }
 }

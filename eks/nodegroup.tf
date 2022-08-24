@@ -33,6 +33,9 @@ resource "aws_iam_role" "NodeInstanceRole" {
   ]
 }
 POLICY
+  tags = {
+    yor_trace = "0cdf502b-975f-4474-9376-227e34847b16"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
@@ -55,6 +58,9 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
 resource "aws_iam_instance_profile" "node_instance_profile" {
   name = "${random_pet.prefix.id}-eks-instance-profile"
   role = aws_iam_role.NodeInstanceRole.name
+  tags = {
+    yor_trace = "bff57d15-2de6-4a16-bd28-651fda1efadb"
+  }
 }
 
 
@@ -66,6 +72,7 @@ resource "aws_security_group" "NodeGroupSecurityGroup" {
   tags = {
     Name                                                         = "${random_pet.prefix.id}-NodeGroupSecurityGroup"
     "kubernetes.io/cluster/${aws_eks_cluster.ControlPlane.name}" = "owned"
+    yor_trace                                                    = "009e9766-2eca-4960-95d4-24b99b6554cb"
   }
 }
 
@@ -193,6 +200,9 @@ resource "aws_launch_template" "NodeGroupLaunchTemplate" {
       aws_security_group.NodeGroupSecurityGroup.id
     ]
     associate_public_ip_address = true
+  }
+  tags = {
+    yor_trace = "93dc6987-a387-4c7c-becc-c532f4418256"
   }
 }
 

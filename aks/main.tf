@@ -26,6 +26,9 @@ provider "azurerm" {
 resource "azurerm_resource_group" "rg" {
   name     = "${random_pet.prefix.id}-rg"
   location = var.location
+  tags = {
+    yor_trace = "066a59c7-f301-4606-8068-3d346cec6826"
+  }
 }
 
 resource "random_pet" "prefix" {}

@@ -3,6 +3,9 @@ resource "azurerm_virtual_network" "aks_vnet" {
   address_space       = ["10.1.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
+  tags = {
+    yor_trace = "b9e265d7-b177-4076-8e67-198cef4721de"
+  }
 }
 
 resource "azurerm_subnet" "aks_subnet" {
